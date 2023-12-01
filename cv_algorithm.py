@@ -6,8 +6,16 @@ def match_images(img_path1, img_path2, n_matches=20):
     match_color = (0, 255, 0)
     line_thickness = 3
 
+    # Read images
     img1 = cv2.imread(img_path1, cv2.IMREAD_GRAYSCALE)
     img2 = cv2.imread(img_path2, cv2.IMREAD_GRAYSCALE)
+
+    # Resize the larger image to the dimensions of the smaller image
+    min_height = min(img1.shape[0], img2.shape[0])
+    min_width = min(img1.shape[1], img2.shape[1])
+
+    img1 = cv2.resize(img1, (min_width, min_height))
+    img2 = cv2.resize(img2, (min_width, min_height))
 
     # Detect keypoints and compute descriptors
     orb = cv2.ORB_create()
@@ -33,7 +41,6 @@ def match_images(img_path1, img_path2, n_matches=20):
 
 
 if __name__ == "__main__":
-    # pass
     img_path1 = '/Users/andy/Downloads/T36UYA_20190805T083601_B07.jp2'
     img_path2 = '/Users/andy/Downloads/T36UYA_20190805T083601_B06.jp2'
 
@@ -42,5 +49,5 @@ if __name__ == "__main__":
     # Perform matching
     img_matches = match_images(img_path1, img_path2)
 
-    # Save the result to an image file
+    # Save the result to an image file outside the function
     cv2.imwrite(output_filename, img_matches)
